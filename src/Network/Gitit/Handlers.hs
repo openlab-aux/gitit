@@ -548,8 +548,11 @@ editPage' params = do
                               strAttr "style" "display: none;",
                               value "Preview" ]
                    , thediv ! [ identifier "previewpane" ] << noHtml
+                   , thelink ! [ strAttr "href" "//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
+                            , strAttr "rel" "stylesheet" ] << noHtml
+                   , script ! [ strAttr "src" "//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js" ] << noHtml
                    ]
-  let pgScripts' = ["preview.js"]
+  let pgScripts' = ["preview.js", "markdown-editor.js"]
   let pgScripts'' = case mathMethod cfg of
        JsMathScript -> "jsMath/easy/load.js" : pgScripts'
        MathML       -> "MathMLinHTML.js" : pgScripts'
