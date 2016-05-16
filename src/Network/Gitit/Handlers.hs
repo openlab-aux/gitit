@@ -541,7 +541,6 @@ editPage' params = do
                    , submit "update" "Save"
                    , primHtmlChar "nbsp"
                    , submit "cancel" "Discard"
-                   , h2 << "Preview"
                    , thediv ! [ identifier "previewpane" ] << noHtml
                    , thelink ! [ strAttr "href" "//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
                             , strAttr "rel" "stylesheet" ] << noHtml

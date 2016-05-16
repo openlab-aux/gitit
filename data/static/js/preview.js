@@ -24,6 +24,8 @@ function updatePreviewPane() {
 };
 $(document).ready(function(){
     $("#previewButton").show();
+    $("#previewpane").before("<h1>Preview</h1>");
+    updatePreviewPane();
     $("#editedText").focus();
 });
 
