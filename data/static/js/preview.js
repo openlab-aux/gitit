@@ -19,7 +19,7 @@ function updatePreviewPane() {
       },
       "html");
 
-    $('#previewpane').fadeIn(1000);
+    $('#previewpane').show();
 
 };
 $(document).ready(function(){

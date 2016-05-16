@@ -541,12 +541,7 @@ editPage' params = do
                    , submit "update" "Save"
                    , primHtmlChar "nbsp"
                    , submit "cancel" "Discard"
-                   , primHtmlChar "nbsp"
-                   , input ! [thetype "button", theclass "editButton",
-                              identifier "previewButton",
-                              strAttr "onClick" "updatePreviewPane();",
-                              strAttr "style" "display: none;",
-                              value "Preview" ]
+                   , h2 << "Preview"
                    , thediv ! [ identifier "previewpane" ] << noHtml
                    , thelink ! [ strAttr "href" "//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
                             , strAttr "rel" "stylesheet" ] << noHtml
