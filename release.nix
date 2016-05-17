@@ -30,4 +30,16 @@ in
       configureFlags = [ "--prefix=/usr" ];
       installCommand = "./Setup install";
     });
+
+  test = with np;
+    releaseTools.debBuild (hello.drvAttrs // {
+      diskImage = vmTools.diskImageFuns.debian7x86_64 {
+        packagesList = fetchurl {
+          url = http://ftp.de.debian.org/debian/dists/wheezy/main/binary-amd64/Packages.bz2;
+          sha256 = "1kir3j6y81s914njvs0sbwywq7qv28f8s615r9agg9s0h5g760fw";
+        };
+      };
+      memSize = 16384;
+      QEMU_OPTS = "-smp 12";
+    });
 }
