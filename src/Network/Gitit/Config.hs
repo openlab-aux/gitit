@@ -30,13 +30,13 @@ import Network.Gitit.Server (mimeTypes)
 import Network.Gitit.Framework
 import Network.Gitit.Authentication (formAuthHandlers, rpxAuthHandlers, httpAuthHandlers, githubAuthHandlers)
 import Network.Gitit.Util (parsePageType, readFileUTF8)
+import Network.Gitit.MetaInformation (getDataFileName)
 import System.Log.Logger (logM, Priority(..))
 import qualified Data.Map as M
 import Data.ConfigFile hiding (readfile)
 import Data.List (intercalate)
 import Data.Char (toLower, toUpper, isDigit)
 import Data.Text (pack)
-import Paths_gitit (getDataFileName)
 import System.FilePath ((</>))
 import Text.Pandoc hiding (MathML, WebTeX, MathJax)
 import qualified Control.Exception as E

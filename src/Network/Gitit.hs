@@ -120,7 +120,7 @@ import Network.Gitit.State
 import Network.Gitit.ContentTransformer
 import Network.Gitit.Page
 import Network.Gitit.Authentication (loginUserForm)
-import Paths_gitit (getDataFileName)
+import Network.Gitit.MetaInformation (getDataFileName)
 import Control.Monad.Reader
 import Prelude hiding (readFile)
 import qualified Data.ByteString.Char8 as B

@@ -35,7 +35,7 @@ import Network.Gitit.State
 import Network.Gitit.Framework
 import Network.Gitit.Plugins
 import Network.Gitit.Layout (defaultRenderPage)
-import Paths_gitit (getDataFileName)
+import Network.Gitit.MetaInformation (getDataFileName)
 import Control.Exception (throwIO, try)
 import System.Directory (copyFile, createDirectoryIfMissing, doesDirectoryExist, doesFileExist)
 import Control.Monad (unless, forM_, liftM)

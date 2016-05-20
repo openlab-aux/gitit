@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -- | Functions for creating Atom feeds for Gitit wikis and pages.
 
 module Network.Gitit.Feed (FeedConfig(..), filestoreToXmlFeed) where
+import Network.Gitit.MetaInformation (version)
 
 import Data.Time (UTCTime, formatTime, getCurrentTime, addUTCTime)
 #if MIN_VERSION_time(1,5,0)
@@ -42,7 +43,6 @@ import Text.Atom.Feed (nullEntry, nullFeed, nullLink, nullPerson,
 import Text.Atom.Feed.Export (xmlFeed)
 import Text.XML.Light (ppTopElement, showContent, Content(..), Element(..), blank_element, QName(..), blank_name, CData(..), blank_cdata)
 import Data.Version (showVersion)
-import Paths_gitit (version)
 
 data FeedConfig = FeedConfig {
     fcTitle    :: String

@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE RecordWildCards #-}
 {-
 Copyright (C) 2008 John MacFarlane <jgm@berkeley.edu>
 
@@ -38,7 +39,7 @@ import Data.Version (showVersion)
 import qualified Data.ByteString.Char8 as B
 import Data.ByteString.UTF8 (fromString)
 
-import Paths_gitit (version, getDataFileName)
+import Network.Gitit.MetaInformation (version, getDataFileName)
 
 main :: IO ()
 main = do
@@ -136,6 +137,13 @@ flags =
         "Specify configuration file"
    ]
 
+data EnvVar = EnvVar { evName :: String
+                     , evDescription :: String }
+envVars :: [EnvVar]
+envVars =
+  [EnvVar { evName = "GITIT_STATIC_DIR"
+          , evDescription = "path to gitit static files" }]
+
 parseArgs :: [String] -> IO [Opt]
 parseArgs argv =
   case getOpt Permute flags argv of
@@ -145,7 +153,9 @@ parseArgs argv =
 usageMessage :: IO String
 usageMessage = do
   progname <- getProgName
-  return $ usageInfo ("Usage:  " ++ progname ++ " [opts...]") flags
+  return (usageInfo ("Usage:  " ++ progname ++ " [opts...]") flags
+          ++ "\nEnvironment Variables:\n"
+          ++ concatMap (\EnvVar{..} -> evName ++ ": " ++ evDescription) envVars)
 
 copyrightMessage :: String
 copyrightMessage = "\nCopyright (C) 2008 John MacFarlane\n" ++

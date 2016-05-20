@@ -32,6 +32,7 @@ import Network.Gitit.Framework (pathForPage, getWikiBase)
 import Network.Gitit.State (getConfig)
 import Network.Gitit.Types
 import Network.Gitit.Cache (cacheContents, lookupCache)
+import Network.Gitit.MetaInformation (getDataFileName)
 import Control.Monad.Trans (liftIO)
 import Control.Monad (unless)
 import Text.XHtml (noHtml)
@@ -45,7 +46,6 @@ import Text.Pandoc.Writers.RTF (writeRTFWithEmbeddedImages)
 import qualified Data.Text as T
 import Data.List (isPrefixOf)
 import Text.Highlighting.Kate (styleToCss, pygments)
-import Paths_gitit (getDataFileName)
 
 defaultRespOptions :: WriterOptions
 defaultRespOptions = def { writerStandalone = True, writerHighlight = True }

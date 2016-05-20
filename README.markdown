@@ -115,6 +115,9 @@ You can control the port that gitit runs on using the `-p` option:
 `gitit -p 4000` will start gitit on port 4000. Additional runtime
 options are described by `gitit -h`.
 
+If you want to tell gitit to use a different default data directiory,
+you can set the `GITIT_STATIC_DIR` environment variable.
+
 Using gitit
 ===========
 
