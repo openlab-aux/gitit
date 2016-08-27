@@ -1,3 +1,18 @@
+// include the SimpleMDE CSS dynamically (since it doesn't make sense without JS)
+//
+//var cssId = 'SimpleMDECSS'
+//if (!document.getElementById(cssId))
+//{
+//    var head  = document.getElementsByTagName('head')[0];
+//    var link  = document.createElement('link');
+//    link.id   = cssId;
+//    link.rel  = 'stylesheet';
+//    link.type = 'text/css';
+//    link.href = '/static/simplemde.min.js';
+//    link.media = 'all';
+//    head.appendChild(link);
+//}
+
 var simplemde = new SimpleMDE({ element: document.getElementById("editedText"), forceSync: true });
 
 // update the preview on every change, after `changeTimeout` ms.
