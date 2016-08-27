@@ -3,14 +3,9 @@ let
 
   hp = np.haskellPackages.override {
     overrides = with np.haskell.lib; (self: super: {
-      openlabGitit = disableSharedExecutables (overrideCabal super.gitit (drv: {
-        src = np.fetchFromGitHub {
-          owner = "openlab-aux";
-          repo = "gitit";
-          rev = "f787065a5462f1f3f9e906f2665dec8c3da56468";
-          sha256 = "1fd04iq24rzhpjmyfgr9xygwp75id329pscgv30zxvqkyw0j2r9y";
-        };
-      }));
+      openlabGitit = overrideCabal super.gitit (drv: {
+        src = ./.;
+      });
     });
   };
 
@@ -54,5 +49,13 @@ let
     tar czf $out/gitit.tar.gz *
   '';
 
+  channel =
+    let mkChannel = (import <vuizvui> {}).pkgs.vuizvui.mkChannel;
+    in mkChannel {
+      name = "gitit-channel";
+      src = ./.;
+      constituents = [ openlabGitit ];
+    };
+
 in
-  { inherit openlabGitit deb debTar; }
+  { inherit openlabGitit deb debTar channel; }
