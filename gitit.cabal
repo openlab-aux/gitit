@@ -62,7 +62,17 @@ data-files:          data/static/css/screen.css, data/static/css/print.css,
                      data/static/js/MathMLinHTML.js, data/static/js/footnotes.js,
                      data/static/js/markdown-editor.js,
                      data/static/js/simplemde.min.js,
+                     data/static/js/mathjax/MathJax.js
+                     data/static/js/mathjax/extensions/MathMenu.js
+                     data/static/js/mathjax/extensions/MathZoom.js
                      data/static/robots.txt,
+                     data/static/font-awesome/css/font-awesome.min.css
+                     data/static/font-awesome/fonts/fontawesome-webfont.eot
+                     data/static/font-awesome/fonts/fontawesome-webfont.svg
+                     data/static/font-awesome/fonts/fontawesome-webfont.ttf
+                     data/static/font-awesome/fonts/fontawesome-webfont.woff
+                     data/static/font-awesome/fonts/fontawesome-webfont.woff2
+                     data/static/font-awesome/fonts/FontAwesome.otf
                      data/s5/default/blank.gif,
                      data/s5/default/bodybg.gif,
                      data/s5/default/framing.css,

@@ -541,6 +541,13 @@ editPage' params = do
                    , submit "update" "Save"
                    , primHtmlChar "nbsp"
                    , submit "cancel" "Discard"
+                   , primHtmlChar "nbsp"
+                   , noscript input ! [ thetype "button", theclass "editButton"
+                             , identifier "previewButton"
+                             , strAttr "onClick" "updatePreviewPane();"
+                             , strAttr "style" "display: none;"
+                             , value "Preview"
+                             ]
                    , thediv ! [ identifier "previewpane" ] << noHtml
                    ]
   let pgScripts' = ["preview.js", "simplemde.min.js", "markdown-editor.js" ]

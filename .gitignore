@@ -8,4 +8,4 @@ my.conf
 gitit-users
 .cabal-sandbox
 github.conf
-/gitit.nix
+gitit.nix

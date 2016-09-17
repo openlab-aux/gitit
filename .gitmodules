@@ -1,3 +1,7 @@
 [submodule "website"]
 	path = website
 	url = git@github.com:jgm/gitit.git
+
+[submodule "mathjax"]
+	path = data/static/js/mathjax
+	url = git@github.com:jgm/gitit.git
