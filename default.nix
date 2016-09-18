@@ -4,5 +4,6 @@ let pkgs =  import <nixpkgs> {};
     {
       prePatch = "patchShebangs fetchDependencies.sh";
       configurePhase = "export CURL_CA_BUNDLE=/tmp/ca-cert.crt;" + (drv.configurePhase or "");
+# non-nixos      configurePhase = "export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt;" + (drv.configurePhase or "");
       nativeBuildInputs = (drv.nativeBuildInputs or []) ++ (with pkgs; [ curl unzip ]);
     })
