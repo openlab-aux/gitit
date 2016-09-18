@@ -13,7 +13,7 @@
 //    head.appendChild(link);
 //}
 
-var simplemde = new SimpleMDE({ element: document.getElementById("editedText"), forceSync: true, autoDownloadFontAwesome : false });
+var simplemde = new SimpleMDE({ element: document.getElementById("editedText"), forceSync: true, autoDownloadFontAwesome : false, spellChecker : false });
 
 // update the preview on every change, after `changeTimeout` ms.
 (function (){
