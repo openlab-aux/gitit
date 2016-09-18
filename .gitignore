@@ -9,3 +9,4 @@ gitit-users
 .cabal-sandbox
 github.conf
 gitit.nix
+static
