@@ -3,3 +3,8 @@
 
 /* Put your custom style modifications here: */
 
+/* simplemde font monospaced */
+.CodeMirror pre {
+  font-family: monospace;
+
+}
