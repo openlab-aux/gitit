@@ -8,10 +8,10 @@
   font-family: monospace;
 }
 
-table thead tr {
+thead tr {
   background-color: #fafafa;
 }
 
-table tr td {
+td {
   border: 1px solid #666;
 }
