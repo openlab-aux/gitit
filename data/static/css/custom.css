@@ -12,6 +12,6 @@ thead tr {
   background-color: #fafafa;
 }
 
-td {
+td, th {
   border: 1px solid #666;
 }
