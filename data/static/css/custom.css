@@ -6,5 +6,12 @@
 /* simplemde font monospaced */
 .CodeMirror pre {
   font-family: monospace;
+}
 
+table thead tr {
+  background-color: #fafafa;
+}
+
+table tr td {
+  border: 1px solid #666;
 }
