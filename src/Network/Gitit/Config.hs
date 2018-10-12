@@ -36,9 +36,7 @@ import qualified Data.Map as M
 import Data.ConfigFile hiding (readfile)
 import Data.List (intercalate)
 import Data.Char (toLower, toUpper, isDigit)
-import Data.Text (pack)
 import qualified Data.Text as T
-import Paths_gitit (getDataFileName)
 import System.FilePath ((</>))
 import Text.Pandoc hiding (ERROR, WARNING, MathJax, MathML, WebTeX, getDataFileName)
 import qualified Control.Exception as E

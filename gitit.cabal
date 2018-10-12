@@ -141,6 +141,7 @@ Library
                      Network.Gitit.Page, Network.Gitit.Feed,
                      Network.Gitit.Compat.Except,
                      Network.Gitit.MetaInformation
+                     Paths_gitit
   build-depends:     base >= 4.9 && < 5,
                      syb,
                      filepath,
