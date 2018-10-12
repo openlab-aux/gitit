@@ -539,8 +539,6 @@ editPage' params = do
                    , br
                    , textfield "logMsg" ! (readonly ++ [value (logMsg `orIfNull` defaultSummary cfg) ])
                    , submit "update" "Save"
-                   , primHtmlChar "nbsp"
-                   , submit "cancel" "Discard"
                    , thediv ! [ identifier "previewpane" ] << noHtml
                    ]
   let pgScripts' = ["preview.js", "simplemde.min.js", "markdown-editor.js" ]
