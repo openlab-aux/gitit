@@ -73,8 +73,10 @@ import qualified Control.Exception as E
 import Control.Monad.State
 import Control.Monad.Reader (ask)
 import Data.Foldable (traverse_)
+import Data.Char (toLower)
 import Data.List (stripPrefix)
 import Data.Maybe (isNothing, mapMaybe)
+import Data.Semigroup ((<>))
 import Network.Gitit.Cache (lookupCache, cacheContents)
 import Network.Gitit.Export (exportFormats)
 import Network.Gitit.Framework hiding (uriPath)
@@ -83,11 +85,13 @@ import Network.Gitit.Page (stringToPage)
 import Network.Gitit.Server
 import Network.Gitit.State
 import Network.Gitit.Types
+import Network.Gitit.Util (getPageTypeDefaultExtensions)
 import Network.HTTP (urlDecode)
 import Network.URI (isUnescapedInURI)
 import Network.URL (encString)
 import System.FilePath
 import qualified Text.Pandoc.Builder as B
+import Text.Pandoc.Extensions (getDefaultExtensions)
 import Text.HTML.SanitizeXSS (sanitizeBalance)
 import Skylighting hiding (Context)
 import Text.Pandoc hiding (MathML, WebTeX, MathJax)
@@ -99,7 +103,6 @@ import Text.Blaze.Html.Renderer.String as Blaze ( renderHtml )
 import Text.Blaze.Renderer.String as Blaze ( renderHtml )
 #endif
 import qualified Data.Text as T
-import qualified Data.Set as Set
 import qualified Data.ByteString as S (concat)
 import qualified Data.ByteString.Char8 as SC (unpack)
 import qualified Data.ByteString.Lazy as L (toChunks, fromChunks)
@@ -107,12 +110,6 @@ import qualified Data.FileStore as FS
 import qualified Text.Pandoc as Pandoc
 import Text.URI (parseURI, URI(..), uriQueryItems)
 
-#if MIN_VERSION_pandoc(1,14,0)
-import Text.Pandoc.Error (handleError)
-#else
-handleError :: Pandoc -> Pandoc
-handleError = id
-#endif
 --
 -- ContentTransformer runners
 --
@@ -362,7 +359,7 @@ pageToPandoc page' = do
   modifyContext $ \ctx -> ctx{ ctxTOC = pageTOC page'
                              , ctxCategories = pageCategories page'
                              , ctxMeta = pageMeta page' }
-  return $ readerFor (pageFormat page') (pageLHS page') (pageText page')
+  either (liftIO . E.throwIO) return $ readerFor (pageFormat page') (pageLHS page') (pageText page')
 
 -- | Detects if the page is a redirect page and handles accordingly. The exact
 -- behaviour is as follows:
@@ -525,32 +522,24 @@ contentsToPage s = do
 -- | Converts pandoc document to HTML.
 pandocToHtml :: Pandoc -> ContentTransformer Html
 pandocToHtml pandocContents = do
-  base' <- lift getWikiBase
   toc <- liftM ctxTOC get
   bird <- liftM ctxBirdTracks get
   cfg <- lift getConfig
   let tpl = "$if(toc)$<div id=\"TOC\">\n$toc$\n</div>\n$endif$\n$body$"
   return $ primHtml $ T.unpack .
-           (if xssSanitize cfg then sanitizeBalance else id) . T.pack $
-           writeHtmlString def{
-#if MIN_VERSION_pandoc(1,19,0)
+           (if xssSanitize cfg then sanitizeBalance else id) $
+           either E.throw id . runPure $ writeHtml5String def{
                         writerTemplate = Just tpl
-#else
-                        writerStandalone = True
-                      , writerTemplate = tpl
-#endif
                       , writerHTMLMathMethod =
                             case mathMethod cfg of
-                                 MathML -> Pandoc.MathML Nothing
+                                 MathML -> Pandoc.MathML
                                  WebTeX u -> Pandoc.WebTeX u
                                  MathJax u -> Pandoc.MathJax u
-                                 _      -> JsMath (Just $ base' ++
-                                                      "/js/jsMath/easy/load.js")
+                                 RawTeX -> Pandoc.PlainMath
                       , writerTableOfContents = toc
-                      , writerHighlight = True
+                      , writerHighlightStyle = Just pygments
                       , writerExtensions = if bird
-                                              then Set.insert
-                                                   Ext_literate_haskell
+                                              then enableExtension Ext_literate_haskell
                                                    $ writerExtensions def
                                               else writerExtensions def
                       -- note: javascript obfuscation gives problems on preview
@@ -655,7 +644,6 @@ addMathSupport c = do
   conf <- lift getConfig
   updateLayout $ \l ->
     case mathMethod conf of
-         JsMathScript -> addScripts l ["jsMath/easy/load.js"]
          MathML       -> addScripts l ["MathMLinHTML.js"]
          WebTeX _     -> l
          MathJax u    -> addScripts l [u]
@@ -697,29 +685,23 @@ updateLayout f = do
 -- Pandoc and wiki content conversion support
 --
 
-readerFor :: PageType -> Bool -> String -> Pandoc
+readerFor :: PageType -> Bool -> String -> Either PandocError Pandoc
 readerFor pt lhs =
-  let defPS = def{ readerSmart = True
-                 , readerExtensions = if lhs
-                                         then Set.insert Ext_literate_haskell
-                                              $ readerExtensions def
-                                         else readerExtensions def
-                 , readerParseRaw = True
-                 }
-  in handleError . case pt of
+  let defExts = getDefaultExtensions $ map toLower $ show pt
+      defPS = def{ readerExtensions = defExts
+                                      <> extensionsFromList [Ext_emoji]
+                                      <> getPageTypeDefaultExtensions pt lhs
+                                      <> readerExtensions def }
+  in runPure . (case pt of
        RST        -> readRST defPS
        Markdown   -> readMarkdown defPS
-#if MIN_VERSION_pandoc(1,14,0)
        CommonMark -> readCommonMark defPS
-#else
-       CommonMark -> error "CommonMark input requires pandoc 1.14"
-#endif
        LaTeX      -> readLaTeX defPS
        HTML       -> readHtml defPS
        Textile    -> readTextile defPS
        Org        -> readOrg defPS
        DocBook    -> readDocBook defPS
-       MediaWiki  -> readMediaWiki defPS
+       MediaWiki  -> readMediaWiki defPS) . T.pack
 
 wikiLinksTransform :: Pandoc -> PluginM Pandoc
 wikiLinksTransform pandoc
@@ -728,17 +710,10 @@ wikiLinksTransform pandoc
 
 -- | Convert links with no URL to wikilinks.
 convertWikiLinks :: Config -> Inline -> Inline
-#if MIN_VERSION_pandoc(1,16,0)
 convertWikiLinks cfg (Link attr ref ("", "")) | useAbsoluteUrls cfg =
   Link attr ref ("/" </> baseUrl cfg </> inlinesToURL ref, "Go to wiki page")
 convertWikiLinks _cfg (Link attr ref ("", "")) =
   Link attr ref (inlinesToURL ref, "Go to wiki page")
-#else
-convertWikiLinks cfg (Link ref ("", "")) | useAbsoluteUrls cfg =
-  Link ref ("/" </> baseUrl cfg </> inlinesToURL ref, "Go to wiki page")
-convertWikiLinks _cfg (Link ref ("", "")) =
-  Link ref (inlinesToURL ref, "Go to wiki page")
-#endif
 convertWikiLinks _cfg x = x
 
 -- | Derives a URL from a list of Pandoc Inline elements.
@@ -761,21 +736,14 @@ inlinesToString = concatMap go
                Cite _ xs               -> concatMap go xs
                Code _ s                -> s
                Space                   -> " "
-#if MIN_VERSION_pandoc(1,16,0)
                SoftBreak               -> " "
-#endif
                LineBreak               -> " "
                Math DisplayMath s      -> "$$" ++ s ++ "$$"
                Math InlineMath s       -> "$" ++ s ++ "$"
                RawInline (Format "tex") s -> s
                RawInline _ _           -> ""
-#if MIN_VERSION_pandoc(1,16,0)
                Link _ xs _             -> concatMap go xs
                Image _ xs _            -> concatMap go xs
-#else
-               Link xs _               -> concatMap go xs
-               Image xs _              -> concatMap go xs
-#endif
                Note _                  -> ""
                Span _ xs               -> concatMap go xs
 

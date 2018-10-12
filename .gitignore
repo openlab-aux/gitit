@@ -3,13 +3,13 @@ TAGS
 dist
 wikidata
 templates
+./static/
 gitit.log
 my.conf
 gitit-users
 .cabal-sandbox
 github.conf
 gitit.nix
-static
 
 # dependencies that get fetched
 # using fetchDependencies

@@ -1,5 +1,5 @@
 name:                gitit
-version:             0.12.2.1
+version:             0.12.3
 Cabal-version:       >= 1.8
 build-type:          Custom
 synopsis:            Wiki using happstack, git or darcs, and pandoc.
@@ -49,7 +49,7 @@ extra-source-files:  data/static/js/jquery-1.2.6.js
                      data/static/js/jquery-ui.draggable-1.6rc2.js
                      data/static/js/jquery-ui.tabs-1.6rc2.js
 data-files:          data/static/css/screen.css, data/static/css/print.css,
-                     data/static/css/ie.css, data/static/css/hk-pyg.css,
+                     data/static/css/ie.css, data/static/css/highlighting.css,
                      data/static/css/reset-fonts-grids.css,
                      data/static/css/custom.css,
                      data/static/css/simplemde.min.css,
@@ -135,7 +135,7 @@ Library
                      Network.Gitit.Authentication.Github,
                      Network.Gitit.Util, Network.Gitit.Server
                      Network.Gitit.Cache, Network.Gitit.State,
-                     Paths_gitit, Network.Gitit.Export,
+                     Network.Gitit.Export,
                      Network.Gitit.Handlers,
                      Network.Gitit.Plugins, Network.Gitit.Rpxnow,
                      Network.Gitit.Page, Network.Gitit.Feed,
@@ -154,9 +154,9 @@ Library
                      directory,
                      mtl,
                      old-time,
-                     pandoc >= 1.12.4 && < 1.20,
-                     pandoc-types >= 1.12.3 && < 1.18,
-                     skylighting >= 0.1.1.5,
+                     pandoc >= 2.2,
+                     pandoc-types >= 1.17.4.2 && < 1.18,
+                     skylighting >= 0.7.4 && < 0.8,
                      bytestring,
                      text,
                      random,
@@ -165,17 +165,17 @@ Library
                      HTTP >= 4000.0 && < 4000.4,
                      HStringTemplate >= 0.6 && < 0.9,
                      old-locale >= 1,
-                     time >= 1.1 && < 1.8,
+                     time >= 1.1 && < 1.10,
                      recaptcha >= 0.1,
                      filestore >= 0.6 && < 0.7,
                      zlib >= 0.5 && < 0.7,
                      url >= 2.1 && < 2.2,
-                     happstack-server >= 7.0 && < 7.5,
+                     happstack-server >= 7.0 && < 7.6,
                      base64-bytestring >= 0.1 && < 1.1,
                      xml >= 1.3.5,
                      hslogger >= 1 && < 1.3,
                      ConfigFile >= 1 && < 1.2,
-                     feed >= 0.3.6 && < 0.4,
+                     feed >= 1.0 && < 1.1,
                      xss-sanitize >= 0.3 && < 0.4,
                      tagsoup >= 0.13 && < 0.15,
                      blaze-html >= 0.4 && < 0.10,
@@ -183,10 +183,11 @@ Library
                      uri >= 0.1 && < 0.2,
                      uri-bytestring >= 0.2.3.3 && <= 0.4,
                      split,
-                     hoauth2 >= 1.3.0 && < 1.6,
-                     http-conduit >= 2.1.4 && < 2.3,
+                     hoauth2 >= 1.3.0 && < 1.8,
+                     xml-conduit >= 1.5 && < 1.9,
+                     http-conduit >= 2.1.6 && < 2.4,
                      http-client-tls >= 0.2.2 && < 0.4,
-                     aeson >= 0.7 && < 1.2,
+                     aeson >= 0.7 && < 1.5,
                      uuid >= 1.3 && < 1.4
   if flag(network-uri)
     build-depends:   network-uri >= 2.6 && < 2.7, network >= 2.6
@@ -208,8 +209,10 @@ Executable           gitit
                      mtl,
                      hslogger,
                      bytestring,
+                     text,
                      utf8-string,
                      directory
+  other-modules:     Paths_gitit
   if flag(network-uri)
     build-depends:   network-uri >= 2.6 && < 2.7, network >= 2.6
   else
