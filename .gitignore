@@ -9,7 +9,6 @@ my.conf
 gitit-users
 .cabal-sandbox
 github.conf
-gitit.nix
 
 # dependencies that get fetched
 # using fetchDependencies
