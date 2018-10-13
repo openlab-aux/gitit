@@ -1,8 +1,11 @@
-let
-  nixpkgsSrc = fetchTarball {
+{
+  nixpkgsSrc ? fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/1af8f3a980bb8ac92f5c09ac23cca4781571bcd1.tar.gz";
     sha256 = "1ak1kanmq1qw0r6bbk9fpz30p8dlifcc05mcyri6il7fj0cbplp1";
-  };
+  }
+}:
+
+let
   nixpkgs = import nixpkgsSrc {};
 
   hp = nixpkgs.haskellPackages.override {
