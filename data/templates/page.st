@@ -14,7 +14,8 @@
     $else$
     <!-- TODO -->
     <link href="$base$/css/simplemde.min.css" rel="stylesheet" media="screen, projection" type="text/css" />
-    <link href="$base$/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="$base$/font-awesome/css/all.css" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="$base$/font-awesome/css/v4-shims.css" rel="stylesheet" media="screen, projection" type="text/css" />
     <link href="$base$/css/custom.css" rel="stylesheet" media="screen, projection" type="text/css" />
     <link href="$base$/css/print.css" rel="stylesheet" media="print" type= "text/css" />
     $endif$

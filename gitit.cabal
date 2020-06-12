@@ -49,7 +49,6 @@ data-files:          data/static/css/screen.css, data/static/css/print.css,
                      data/static/css/ie.css, data/static/css/highlighting.css,
                      data/static/css/reset-fonts-grids.css,
                      data/static/css/custom.css,
-                     data/static/css/simplemde.min.css,
                      data/static/img/logo.png, data/static/img/icons/feed.png,
                      data/static/img/icons/folder.png, data/static/img/icons/page.png,
                      data/static/js/dragdiff.js, data/static/js/jquery-1.2.6.min.js,
@@ -57,19 +56,7 @@ data-files:          data/static/css/screen.css, data/static/css/print.css,
                      data/static/js/jquery.hotkeys-0.7.9.min.js,
                      data/static/js/preview.js, data/static/js/search.js,
                      data/static/js/MathMLinHTML.js, data/static/js/footnotes.js,
-                     data/static/js/markdown-editor.js,
-                     data/static/js/simplemde.min.js,
-                     data/static/js/mathjax/MathJax.js
-                     data/static/js/mathjax/extensions/MathMenu.js
-                     data/static/js/mathjax/extensions/MathZoom.js
                      data/static/robots.txt,
-                     data/static/font-awesome/css/font-awesome.min.css
-                     data/static/font-awesome/fonts/fontawesome-webfont.eot
-                     data/static/font-awesome/fonts/fontawesome-webfont.svg
-                     data/static/font-awesome/fonts/fontawesome-webfont.ttf
-                     data/static/font-awesome/fonts/fontawesome-webfont.woff
-                     data/static/font-awesome/fonts/fontawesome-webfont.woff2
-                     data/static/font-awesome/fonts/FontAwesome.otf
                      data/s5/default/blank.gif,
                      data/s5/default/bodybg.gif,
                      data/s5/default/framing.css,
@@ -108,10 +95,22 @@ data-files:          data/static/css/screen.css, data/static/css/print.css,
                      plugins/Signature.hs,
                      plugins/Subst.hs,
                      CHANGES, README.markdown, YUI-LICENSE, BLUETRIP-LICENSE, TANGOICONS
+                     data/static/js/markdown-editor.js,
+                     data/static/js/simplemde.min.js,
+                     data/static/css/simplemde.min.css,
+                     data/static/js/mathjax/MathJax.js,
+                     data/static/js/mathjax/extensions/*.js,
+                     data/static/font-awesome/css/all.css,
+                     data/static/font-awesome/css/v4-shims.css,
+                     data/static/font-awesome/webfonts/*.eot,
+                     data/static/font-awesome/webfonts/*.svg,
+                     data/static/font-awesome/webfonts/*.woff,
+                     data/static/font-awesome/webfonts/*.woff2,
+                     data/static/font-awesome/webfonts/*.ttf
 
 Source-repository head
   type:          git
-  location:      git://github.com/jgm/gitit.git
+  location:      git://github.com/openlab-aux/gitit.git
 
 Flag plugins
   description:       Compile in support for plugins.  This will increase the size of
@@ -133,7 +132,7 @@ Library
                      Network.Gitit.Plugins, Network.Gitit.Rpxnow,
                      Network.Gitit.Page, Network.Gitit.Feed,
                      Network.Gitit.Compat.Except,
-                     Network.Gitit.MetaInformation
+                     Network.Gitit.MetaInformation,
                      Paths_gitit
   autogen-modules:   Paths_gitit
   build-depends:     base >= 4.9 && < 5,

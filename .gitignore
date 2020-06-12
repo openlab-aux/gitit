@@ -1,8 +1,8 @@
 cabal.sandbox.config
 TAGS
 dist
-wikidata
-templates
+/wikidata
+/templates
 ./static/
 gitit.log
 my.conf
@@ -11,5 +11,7 @@ gitit-users
 github.conf
 /.stack-work/
 /static/
-data/static/js/mathjax
-data/static/font-awesome
+/data/static/js/mathjax
+/data/static/font-awesome
+/data/static/js/simplemde.min.js
+/data/static/css/simplemde.min.css

@@ -1,3 +1,22 @@
+OpenLab' gitit fork
+===================
+
+OpenLab's gitit fork includes the following improvements to default gitit:
+
+* Better Markdown editor (SimpleMDE)
+* Self-Hosted MathJax
+* Some minor adjustments for our Wiki
+
+It is best built using [`default.nix`](./default.nix) (simply run `nix-build`).
+This will fetch the JS dependencies needed for our gitit fork and make sure
+cabal will find them while building.
+
+OpenLab's gitit expects, in case you want to build it manually:
+
+* MathJax v2 in `data/js/mathjax/{MathJax.js,extensions/MathZoom.js,extensions/MathMenu.js}`
+* SimpleMDE in `data/js/simplemde.min.js` and `data/css/simplemde.min.css`
+* Font-Awesome in `data/font-awesome` (`css/{all.css,v4-shims.css}` and the `webfonts` directory)
+
 Gitit
 =====
 
