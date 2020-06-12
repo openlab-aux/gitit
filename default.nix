@@ -40,19 +40,21 @@ let
 
   hp = nixpkgs.haskellPackages.override {
     overrides = self: super: with nixpkgs.haskell.lib; {
-      gitit = super.gitit.overrideAttrs (old: {
-        postPatch = ''
-          rm -rf ./data/static/{font-awesome,js/mathjax}
-          mkdir -p ./data/static/js/mathjax/extensions
-          cp ${mathJax} ./data/static/js/mathjax/MathJax.js
-          cp ${mathJaxMenu} ./data/static/js/mathjax/extensions/MathMenu.js
-          cp ${mathJaxZoom} ./data/static/js/mathjax/extensions/MathZoom.js
-          cp -R ${fontAwesome} data/static/font-awesome
-          cp ${simpleMDE}/dist/simplemde.min.js ./data/static/js/
-          cp ${simpleMDE}/dist/simplemde.min.css ./data/static/css/
-        '';
-        src = nixpkgs.nix-gitignore.gitignoreSource [ ".git/" ] ./.;
-      });
+      gitit =
+        let drv = nixpkgs.haskell.lib.appendConfigureFlags super.gitit [ "--ghc-option=-rtsopts" ];
+        in drv.overrideAttrs (old: {
+          postPatch = ''
+            rm -rf ./data/static/{font-awesome,js/mathjax}
+            mkdir -p ./data/static/js/mathjax/extensions
+            cp ${mathJax} ./data/static/js/mathjax/MathJax.js
+            cp ${mathJaxMenu} ./data/static/js/mathjax/extensions/MathMenu.js
+            cp ${mathJaxZoom} ./data/static/js/mathjax/extensions/MathZoom.js
+            cp -R ${fontAwesome} data/static/font-awesome
+            cp ${simpleMDE}/dist/simplemde.min.js ./data/static/js/
+            cp ${simpleMDE}/dist/simplemde.min.css ./data/static/css/
+          '';
+          src = nixpkgs.nix-gitignore.gitignoreSource [ ".git/" "default.nix" "release.nix" "shell.nix" ] ./.;
+        });
     };
   };
 
