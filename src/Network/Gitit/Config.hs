@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, FlexibleContexts, ScopedTypeVariables #-}
+{-# LANGUAGE CPP, FlexibleContexts, ScopedTypeVariables, OverloadedStrings #-}
 {-
 Copyright (C) 2009 John MacFarlane <jgm@berkeley.edu>
 
@@ -46,7 +46,6 @@ import qualified Data.ByteString.Char8 as BS
 import Network.Gitit.Compat.Except
 import Control.Monad
 import Control.Monad.Trans
-import Text.Pandoc.Error (handleError)
 
 
 forceEither :: Show e => Either e a -> a
@@ -138,7 +137,7 @@ extractConfig cp = do
       let markupHelpFile = show pt ++ if lhs then "+LHS" else ""
       markupHelpPath <- liftIO $ getDataFileName $ "data" </> "markupHelp" </> markupHelpFile
       markupHelp' <- liftIO $ readFileUTF8 markupHelpPath
-      markupHelpText <- liftIO $ handleError $ runPure $ do        
+      markupHelpText <- liftIO $ handleError $ runPure $ do
         helpDoc <- readMarkdown def{ readerExtensions = getDefaultExtensions "markdown" } markupHelp'
         writeHtml5String def helpDoc
 
@@ -256,7 +255,11 @@ extractGithubConfig cp = do
                  then fmap Just (getGithubProp "github-org")
                  else return Nothing
       let cfgOAuth2 = OAuth2 { oauthClientId = T.pack cfOauthClientId
+#if MIN_VERSION_hoauth2(1, 11, 0)
+                          , oauthClientSecret = Just $ T.pack cfOauthClientSecret
+#else
                           , oauthClientSecret = T.pack cfOauthClientSecret
+#endif
                           , oauthCallback = Just cfOauthCallback
                           , oauthOAuthorizeEndpoint = cfOauthOAuthorizeEndpoint
                           , oauthAccessTokenEndpoint = cfOauthAccessTokenEndpoint
@@ -273,8 +276,8 @@ extractGithubConfig cp = do
                               Right uri -> return uri
 
 fromQuotedMultiline :: String -> String
-fromQuotedMultiline = unlines . map doline . lines . dropWhile (`elem` " \t\n")
-  where doline = dropWhile (`elem` " \t") . dropGt
+fromQuotedMultiline = unlines . map doline . lines . dropWhile (`elem` [' ','\t','\n'])
+  where doline = dropWhile (`elem` [' ','\t']) . dropGt
         dropGt ('>':' ':xs) = xs
         dropGt ('>':xs) = xs
         dropGt x = x
@@ -301,7 +304,7 @@ splitCommaList l =
 
 lrStrip :: String -> String
 lrStrip = reverse . dropWhile isWhitespace . reverse . dropWhile isWhitespace
-    where isWhitespace = (`elem` " \t\n")
+    where isWhitespace = (`elem` [' ','\t','\n'])
 
 getDefaultConfigParser :: IO ConfigParser
 getDefaultConfigParser = do

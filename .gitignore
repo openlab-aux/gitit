@@ -9,7 +9,8 @@ my.conf
 gitit-users
 .cabal-sandbox
 github.conf
-
+/.stack-work/
+/static/
 # dependencies that get fetched
 # using fetchDependencies
 data/static/js/simplemde.min.js
