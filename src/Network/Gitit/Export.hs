@@ -49,6 +49,7 @@ import qualified Data.Text as T
 import Data.Text.Encoding (encodeUtf8)
 import Data.List (isPrefixOf)
 import Skylighting (styleToCss, pygments)
+import Network.Gitit.MetaInformation (getDataFileName)
 
 defaultRespOptions :: WriterOptions
 defaultRespOptions = def { writerHighlightStyle = Just pygments }
