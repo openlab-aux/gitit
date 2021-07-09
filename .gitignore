@@ -15,3 +15,5 @@ github.conf
 /data/static/font-awesome
 /data/static/js/simplemde.min.js
 /data/static/css/simplemde.min.css
+
+/result*
