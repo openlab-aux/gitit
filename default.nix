@@ -1,7 +1,7 @@
 {
   nixpkgsSrc ? fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/91340aeea87aa25f8265b0a69af88d7d36fcf04f.tar.gz";
-    sha256 = "0npma33j6a7cx6gmi4x8acxlffp482dfv2l4acrmpadv2v7nayzi";
+    url = "https://github.com/NixOS/nixpkgs/archive/87807e64a5ef5206b745a40af118c7be8db73681.tar.gz";
+    sha256 = "056jv0m6x3q95ndj8mrwsy90s4imv34dl1lri9qyjrvl8r33kzzy";
   }
 }:
 
@@ -41,8 +41,14 @@ let
   hp = nixpkgs.haskellPackages.override {
     overrides = self: super: with nixpkgs.haskell.lib; {
       gitit =
-        let drv = nixpkgs.haskell.lib.appendConfigureFlags super.gitit [ "--ghc-option=-rtsopts" ];
-        in drv.overrideAttrs (old: {
+        overrideCabal super.gitit (old: {
+          # remove patches from nixpkgs
+          patches = [];
+          # enable RTS opts so we can disable idle GC
+          configureFlags = [
+            "--ghc-option=-rtsopts"
+          ] ++ (old.configureFlags or []);
+          # provide web assets
           postPatch = ''
             rm -rf ./data/static/{font-awesome,js/mathjax}
             mkdir -p ./data/static/js/mathjax/extensions
