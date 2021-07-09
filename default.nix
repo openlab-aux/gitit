@@ -65,4 +65,4 @@ let
     };
   };
 
-in hp.gitit
+in nixpkgs.haskell.lib.justStaticExecutables hp.gitit
