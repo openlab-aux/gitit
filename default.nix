@@ -44,9 +44,10 @@ let
         overrideCabal super.gitit (old: {
           # remove patches from nixpkgs
           patches = [];
-          # enable RTS opts so we can disable idle GC
+          # enable RTS opts and run idle GC only every 10min
           configureFlags = [
             "--ghc-option=-rtsopts"
+            "--ghc-option=-with-rtsopts=-I600"
           ] ++ (old.configureFlags or []);
           # provide web assets
           postPatch = ''
