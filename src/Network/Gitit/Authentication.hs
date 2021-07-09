@@ -44,7 +44,7 @@ import System.Exit
 import System.Log.Logger (logM, Priority(..))
 import Data.Char (isAlphaNum, isAlpha)
 import qualified Data.Map as M
-import Text.Pandoc.Shared (substitute)
+import Data.List (stripPrefix)
 import Data.Maybe (isJust, fromJust, isNothing, fromMaybe)
 import Network.URL (exportURL, add_param, importURL)
 import Network.BSD (getHostName)
@@ -53,6 +53,16 @@ import Network.HTTP (urlEncodeVars, urlDecode, urlEncode)
 import Codec.Binary.UTF8.String (encodeString)
 import Data.ByteString.UTF8 (toString)
 import Network.Gitit.Rpxnow as R
+
+-- | Replace each occurrence of one sublist in a list with another.
+--   Vendored in from pandoc 2.11.4 as 2.12 removed this function.
+substitute :: (Eq a) => [a] -> [a] -> [a] -> [a]
+substitute _ _ [] = []
+substitute [] _ xs = xs
+substitute target replacement lst@(x:xs) =
+    case stripPrefix target lst of
+      Just lst' -> replacement ++ substitute target replacement lst'
+      Nothing   -> x : substitute target replacement xs
 
 data ValidationType = Register
                     | ResetPassword
@@ -350,16 +360,18 @@ loginForm dest = do
       , textfield "destination" ! [thestyle "display: none;", value dest]
       , submit "login" "Login" ! [intAttr "tabindex" 3]
       ] +++
-    p << [ stringToHtml "If you do not have an account, "
-         , anchor ! [href $ base' ++ "/_register?" ++
-           urlEncodeVars [("destination", encodeString dest)]] << "click here to get one."
-         ] +++
-    if null (mailCommand cfg)
+    (if disableRegistration cfg
+       then noHtml
+       else p << [ stringToHtml "If you do not have an account, "
+                 , anchor ! [href $ base' ++ "/_register?" ++
+                     urlEncodeVars [("destination", encodeString dest)]] << "click here to get one."
+                 ]) +++
+    (if null (mailCommand cfg)
        then noHtml
        else p << [ stringToHtml "If you forgot your password, "
                  , anchor ! [href $ base' ++ "/_resetPassword"] <<
                      "click here to get a new one."
-                 ]
+                 ])
 
 loginUserForm :: Handler
 loginUserForm = withData $ \params -> do
@@ -410,11 +422,18 @@ registerUserForm = registerForm >>=
                     pgTitle = "Register for an account"
                     }
 
-formAuthHandlers :: [Handler]
-formAuthHandlers =
+regAuthHandlers :: [Handler]
+regAuthHandlers =
   [ dir "_register"  $ method GET >> registerUserForm
   , dir "_register"  $ method POST >> withData registerUser
-  , dir "_login"     $ method GET  >> loginUserForm
+  ]
+
+formAuthHandlers :: Bool -> [Handler]
+formAuthHandlers disableReg =
+  (if disableReg
+    then []
+    else regAuthHandlers) ++
+  [ dir "_login"     $ method GET  >> loginUserForm
   , dir "_login"     $ method POST >> withData loginUser
   , dir "_logout"    $ method GET  >> withData logoutUser
   , dir "_resetPassword"   $ method GET  >> withData resetPasswordRequestForm
