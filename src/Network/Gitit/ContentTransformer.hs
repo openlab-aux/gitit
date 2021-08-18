@@ -31,7 +31,6 @@ module Network.Gitit.ContentTransformer
   , showRawPage
   , showFileAsText
   , showPage
-  , exportPage
   , showHighlightedSource
   , showFile
   , preview
@@ -45,7 +44,6 @@ module Network.Gitit.ContentTransformer
   , textResponse
   , mimeFileResponse
   , mimeResponse
-  , exportPandoc
   , applyWikiTemplate
   -- * Content-type transformation combinators
   , pageToWikiPandoc
@@ -79,7 +77,6 @@ import Data.List (stripPrefix)
 import Data.Maybe (isNothing, mapMaybe)
 import Data.Semigroup ((<>))
 import Network.Gitit.Cache (lookupCache, cacheContents)
-import Network.Gitit.Export (exportFormats)
 import Network.Gitit.Framework hiding (uriPath)
 import Network.Gitit.Layout
 import Network.Gitit.Page (stringToPage)
@@ -186,10 +183,6 @@ showFileAsText = runFileTransformer rawTextResponse
 showPage :: Handler
 showPage = runPageTransformer htmlViaPandoc
 
--- | Responds with page exported into selected format.
-exportPage :: Handler
-exportPage = runPageTransformer exportViaPandoc
-
 -- | Responds with highlighted source code.
 showHighlightedSource :: Handler
 showHighlightedSource = runFileTransformer highlightRawSource
@@ -219,15 +212,6 @@ applyPreCommitPlugins = runPageTransformer . applyPreCommitTransforms
 -- | Responds with raw source.
 rawTextResponse :: ContentTransformer Response
 rawTextResponse = rawContents >>= textResponse
-
--- | Responds with a wiki page in the format specified
--- by the @format@ parameter.
-exportViaPandoc :: ContentTransformer Response
-exportViaPandoc = rawContents >>=
-                  maybe mzero return >>=
-                  contentsToPage >>=
-                  pageToWikiPandoc >>=
-                  exportPandoc
 
 -- | Responds with a wiki page. Uses the cache when
 -- possible and caches the rendered page when appropriate.
@@ -321,17 +305,6 @@ mimeResponse :: Monad m
              -> m Response
 mimeResponse c mimeType =
   return . setContentType mimeType . toResponse $ c
-
--- | Converts Pandoc to response using format specified in parameters.
-exportPandoc :: Pandoc -> ContentTransformer Response
-exportPandoc doc = do
-  params <- getParams
-  page <- getPageName
-  cfg <- lift getConfig
-  let format = pFormat params
-  case lookup format (exportFormats cfg) of
-       Nothing     -> error $ "Unknown export format: " ++ format
-       Just writer -> lift (writer page doc)
 
 -- | Adds the sidebar, page tabs, and other elements of the wiki page
 -- layout to the raw content.
@@ -744,6 +717,9 @@ inlinesToString = T.unpack . mconcat . map go
                Superscript xs          -> mconcat $ map go xs
                Subscript xs            -> mconcat $ map go xs
                SmallCaps xs            -> mconcat $ map go xs
+#if MIN_VERSION_pandoc(2,10,0)
+               Underline xs            -> mconcat $ map go xs
+#endif
                Quoted DoubleQuote xs   -> "\"" <> mconcat (map go xs) <> "\""
                Quoted SingleQuote xs   -> "'" <> mconcat (map go xs) <> "'"
                Cite _ xs               -> mconcat $ map go xs

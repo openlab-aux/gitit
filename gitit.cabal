@@ -1,6 +1,6 @@
 cabal-version:       2.0
 name:                gitit
-version:             0.13.0.0
+version:             0.15.0.0
 build-type:          Simple
 synopsis:            Wiki using happstack, git or darcs, and pandoc.
 description:         Gitit is a wiki backed by a git, darcs, or mercurial
@@ -9,9 +9,7 @@ description:         Gitit is a wiki backed by a git, darcs, or mercurial
                      the wiki's web interface. Pandoc is used for markup
                      processing, so pages may be written in
                      (extended) markdown, reStructuredText, LaTeX, HTML,
-                     or literate Haskell, and exported in ten different
-                     formats, including LaTeX, ConTeXt, DocBook, RTF,
-                     OpenOffice ODT, and MediaWiki markup.
+                     or literate Haskell.
                      .
                      Notable features include
                      .
@@ -127,7 +125,6 @@ Library
                      Network.Gitit.Authentication.Github,
                      Network.Gitit.Util, Network.Gitit.Server
                      Network.Gitit.Cache, Network.Gitit.State,
-                     Network.Gitit.Export,
                      Network.Gitit.Handlers,
                      Network.Gitit.Plugins, Network.Gitit.Rpxnow,
                      Network.Gitit.Page, Network.Gitit.Feed,
@@ -148,16 +145,17 @@ Library
                      directory,
                      mtl,
                      old-time,
-                     pandoc >= 2.9 && < 2.14,
+                     temporary,
+                     pandoc >= 2.9 && < 2.15,
                      pandoc-types >= 1.20 && < 1.23,
-                     skylighting >= 0.8.2.3 && < 0.11,
+                     skylighting >= 0.8.2.3 && < 0.12,
                      bytestring,
                      text,
                      random,
                      utf8-string >= 0.3 && < 1.1,
                      SHA > 1,
                      HTTP >= 4000.0,
-                     HStringTemplate >= 0.6 && < 0.9,
+                     HStringTemplate >= 0.8.8 && < 0.9,
                      old-locale,
                      time,
                      recaptcha >= 0.1,
@@ -199,7 +197,7 @@ Library
 Executable           gitit
   hs-source-dirs:    .
   main-is:           gitit.hs
-  build-depends:     base >=3 && < 5,
+  build-depends:     base >= 4.9 && < 5,
                      gitit,
                      mtl,
                      hslogger,
