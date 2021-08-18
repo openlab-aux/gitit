@@ -42,6 +42,20 @@ let
     overrides = self: super: with nixpkgs.haskell.lib; {
       gitit =
         overrideCabal super.gitit (old: {
+          # get version number from the cabal file
+          version =
+            let
+              lines = builtins.filter builtins.isString
+                (builtins.split "\n" (builtins.readFile ./gitit.cabal));
+              versionMatches = nixpkgs.lib.concatLists (
+                builtins.filter (x: x != null) (
+                  builtins.map (
+                    builtins.match "version:[ ]+([0-9.]+)"
+                  ) lines
+                )
+              );
+            in assert builtins.length versionMatches == 1;
+              builtins.head versionMatches;
           # remove patches from nixpkgs
           patches = [];
           # enable RTS opts and run idle GC only every 10min
