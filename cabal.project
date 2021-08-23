@@ -1,0 +1,3 @@
+packages: gitit.cabal
+tests: True
+flags: +embed_data_files +plugins

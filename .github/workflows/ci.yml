@@ -10,17 +10,11 @@ jobs:
       fail-fast: false
       matrix:
         versions:
-          - ghc: '8.0.2'
-            cabal: '2.4'
-          - ghc: '8.2.2'
-            cabal: '2.4'
-          - ghc: '8.4.4'
-            cabal: '2.4'
           - ghc: '8.6.5'
             cabal: '3.2'
           - ghc: '8.8.3'
             cabal: '3.2'
-          - ghc: '8.10.1'
+          - ghc: '8.10.4'
             cabal: '3.2'
     steps:
     - uses: actions/checkout@v1
@@ -38,7 +32,6 @@ jobs:
           cabal v2-build --dependencies-only --enable-tests --disable-optimization -fexecutable all
     - name: Build and test
       run: |
-          export PATH=/opt/cabal/${{ matrix.versions.cabal }}/bin:/opt/ghc/${{ matrix.versions.ghc }}/bin:$PATH
           cabal v2-build --enable-tests --disable-optimization -fexecutable all
 
   macos:

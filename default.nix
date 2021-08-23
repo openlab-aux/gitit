@@ -1,7 +1,7 @@
 {
   nixpkgsSrc ? fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/87807e64a5ef5206b745a40af118c7be8db73681.tar.gz";
-    sha256 = "056jv0m6x3q95ndj8mrwsy90s4imv34dl1lri9qyjrvl8r33kzzy";
+    url = "https://github.com/NixOS/nixpkgs/archive/2435ea48c3b295d9cd490535730bb13ab8cfd8a5.tar.gz";
+    sha256 = "02ph4di27alkykj4dcr4zfp2ply2zs4wh3gwpz5cs90l0ycy0fxk";
   }
 }:
 
@@ -42,6 +42,20 @@ let
     overrides = self: super: with nixpkgs.haskell.lib; {
       gitit =
         overrideCabal super.gitit (old: {
+          # get version number from the cabal file
+          version =
+            let
+              lines = builtins.filter builtins.isString
+                (builtins.split "\n" (builtins.readFile ./gitit.cabal));
+              versionMatches = nixpkgs.lib.concatLists (
+                builtins.filter (x: x != null) (
+                  builtins.map (
+                    builtins.match "version:[ ]+([0-9.]+)"
+                  ) lines
+                )
+              );
+            in assert builtins.length versionMatches == 1;
+              builtins.head versionMatches;
           # remove patches from nixpkgs
           patches = [];
           # enable RTS opts and run idle GC only every 10min
