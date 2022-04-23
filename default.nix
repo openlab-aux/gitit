@@ -1,7 +1,7 @@
 {
   nixpkgsSrc ? fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/2435ea48c3b295d9cd490535730bb13ab8cfd8a5.tar.gz";
-    sha256 = "02ph4di27alkykj4dcr4zfp2ply2zs4wh3gwpz5cs90l0ycy0fxk";
+    url = "https://github.com/NixOS/nixpkgs/archive/1ffba9f2f683063c2b14c9f4d12c55ad5f4ed887.tar.gz";
+    sha256 = "1zx5zvpvqrgk5mfxzmwf8gd270lz7dkfk563sccp1xlhac15cipg";
   }
 }:
 
