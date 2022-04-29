@@ -38,12 +38,17 @@ let
     name = "simplemde";
   };
 
+  inherit (nixpkgs.haskell.lib.compose)
+    overrideCabal
+    justStaticExecutables
+    ;
+
   makeGitit = haskellPackages:
     let
-      hp = haskellPackages.override {
-        overrides = self: super: with nixpkgs.haskell.lib; {
-          gitit =
-            overrideCabal super.gitit (old: {
+      newHaskellPackages = haskellPackages.override {
+        overrides = self: super: {
+          gitit = nixpkgs.lib.pipe super.gitit [
+            (overrideCabal (old: {
               # get version number from the cabal file
               version =
                 let
@@ -76,11 +81,18 @@ let
                 cp ${simpleMDE}/dist/simplemde.min.js ./data/static/js/
                 cp ${simpleMDE}/dist/simplemde.min.css ./data/static/css/
               '';
-              src = nixpkgs.nix-gitignore.gitignoreSource [ ".git/" "default.nix" "release.nix" "shell.nix" ] ./.;
-            });
+              src = nixpkgs.nix-gitignore.gitignoreSource [
+                ".git/"
+                "release.nix"
+                "default.nix"
+                "shell.nix"
+              ] ./.;
+            }))
+            justStaticExecutables
+          ];
         };
       };
-    in nixpkgs.haskell.lib.justStaticExecutables hp.gitit;
+    in newHaskellPackages.gitit;
 
 in
 
