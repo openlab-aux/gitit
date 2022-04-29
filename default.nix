@@ -1,7 +1,7 @@
 {
   nixpkgsSrc ? fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/1ffba9f2f683063c2b14c9f4d12c55ad5f4ed887.tar.gz";
-    sha256 = "1zx5zvpvqrgk5mfxzmwf8gd270lz7dkfk563sccp1xlhac15cipg";
+    url = "https://github.com/NixOS/nixpkgs/archive/813f8b5efbc827bf39416120b8a651cc1a2df8c5.tar.gz";
+    sha256 = "06q8j9bls0l48pf5ri6sbksm121s5l5b4x337hc74vn08pq5bc6h";
   }
 }:
 
@@ -101,4 +101,5 @@ in
 
 {
   dynamic = makeGitit nixpkgs.haskellPackages;
+  static = makeGitit nixpkgs.pkgsStatic.haskellPackages;
 }
