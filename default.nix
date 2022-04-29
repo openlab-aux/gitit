@@ -87,6 +87,9 @@ let
                 "default.nix"
                 "shell.nix"
               ] ./.;
+              passthru = old.passthru or {} // {
+                haskellPackages = self;
+              };
             }))
             justStaticExecutables
           ];
