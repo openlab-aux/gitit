@@ -1,7 +1,7 @@
 {
   nixpkgsSrc ? fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/1ffba9f2f683063c2b14c9f4d12c55ad5f4ed887.tar.gz";
-    sha256 = "1zx5zvpvqrgk5mfxzmwf8gd270lz7dkfk563sccp1xlhac15cipg";
+    url = "https://github.com/NixOS/nixpkgs/archive/813f8b5efbc827bf39416120b8a651cc1a2df8c5.tar.gz";
+    sha256 = "06q8j9bls0l48pf5ri6sbksm121s5l5b4x337hc74vn08pq5bc6h";
   }
 }:
 
@@ -38,45 +38,68 @@ let
     name = "simplemde";
   };
 
-  hp = nixpkgs.haskellPackages.override {
-    overrides = self: super: with nixpkgs.haskell.lib; {
-      gitit =
-        overrideCabal super.gitit (old: {
-          # get version number from the cabal file
-          version =
-            let
-              lines = builtins.filter builtins.isString
-                (builtins.split "\n" (builtins.readFile ./gitit.cabal));
-              versionMatches = nixpkgs.lib.concatLists (
-                builtins.filter (x: x != null) (
-                  builtins.map (
-                    builtins.match "version:[ ]+([0-9.]+)"
-                  ) lines
-                )
-              );
-            in assert builtins.length versionMatches == 1;
-              builtins.head versionMatches;
-          # remove patches from nixpkgs
-          patches = [];
-          # enable RTS opts and run idle GC only every 10min
-          configureFlags = [
-            "--ghc-option=-rtsopts"
-            "--ghc-option=-with-rtsopts=-I600"
-          ] ++ (old.configureFlags or []);
-          # provide web assets
-          postPatch = ''
-            rm -rf ./data/static/{font-awesome,js/mathjax}
-            mkdir -p ./data/static/js/mathjax/extensions
-            cp ${mathJax} ./data/static/js/mathjax/MathJax.js
-            cp ${mathJaxMenu} ./data/static/js/mathjax/extensions/MathMenu.js
-            cp ${mathJaxZoom} ./data/static/js/mathjax/extensions/MathZoom.js
-            cp -R ${fontAwesome} data/static/font-awesome
-            cp ${simpleMDE}/dist/simplemde.min.js ./data/static/js/
-            cp ${simpleMDE}/dist/simplemde.min.css ./data/static/css/
-          '';
-          src = nixpkgs.nix-gitignore.gitignoreSource [ ".git/" "default.nix" "release.nix" "shell.nix" ] ./.;
-        });
-    };
-  };
+  inherit (nixpkgs.haskell.lib.compose)
+    overrideCabal
+    justStaticExecutables
+    ;
 
-in nixpkgs.haskell.lib.justStaticExecutables hp.gitit
+  makeGitit = haskellPackages:
+    let
+      newHaskellPackages = haskellPackages.override {
+        overrides = self: super: {
+          gitit = nixpkgs.lib.pipe super.gitit [
+            (overrideCabal (old: {
+              # get version number from the cabal file
+              version =
+                let
+                  lines = builtins.filter builtins.isString
+                    (builtins.split "\n" (builtins.readFile ./gitit.cabal));
+                  versionMatches = nixpkgs.lib.concatLists (
+                    builtins.filter (x: x != null) (
+                      builtins.map (
+                        builtins.match "version:[ ]+([0-9.]+)"
+                      ) lines
+                    )
+                  );
+                in assert builtins.length versionMatches == 1;
+                  builtins.head versionMatches;
+              # remove patches from nixpkgs
+              patches = [];
+              # enable RTS opts and run idle GC only every 10min
+              configureFlags = [
+                "--ghc-option=-rtsopts"
+                "--ghc-option=-with-rtsopts=-I600"
+              ] ++ (old.configureFlags or []);
+              # provide web assets
+              postPatch = ''
+                rm -rf ./data/static/{font-awesome,js/mathjax}
+                mkdir -p ./data/static/js/mathjax/extensions
+                cp ${mathJax} ./data/static/js/mathjax/MathJax.js
+                cp ${mathJaxMenu} ./data/static/js/mathjax/extensions/MathMenu.js
+                cp ${mathJaxZoom} ./data/static/js/mathjax/extensions/MathZoom.js
+                cp -R ${fontAwesome} data/static/font-awesome
+                cp ${simpleMDE}/dist/simplemde.min.js ./data/static/js/
+                cp ${simpleMDE}/dist/simplemde.min.css ./data/static/css/
+              '';
+              src = nixpkgs.nix-gitignore.gitignoreSource [
+                ".git/"
+                "release.nix"
+                "default.nix"
+                "shell.nix"
+              ] ./.;
+              passthru = old.passthru or {} // {
+                haskellPackages = self;
+              };
+            }))
+            justStaticExecutables
+          ];
+        };
+      };
+    in newHaskellPackages.gitit;
+
+in
+
+{
+  dynamic = makeGitit nixpkgs.haskellPackages;
+  static = makeGitit nixpkgs.pkgsStatic.haskellPackages;
+}
