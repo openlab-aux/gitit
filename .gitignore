@@ -17,3 +17,5 @@ github.conf
 /data/static/css/simplemde.min.css
 
 /result*
+
+.DS_Store
