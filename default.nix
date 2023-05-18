@@ -2,6 +2,7 @@
   nixpkgs ? import ./nixpkgs.nix {}
 }:
 let
+  lib = nixpkgs.lib;
 
   mathJax = nixpkgs.fetchurl {
     url = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML-full";
@@ -34,9 +35,11 @@ let
   };
 
   hp = nixpkgs.haskellPackages.override {
-    overrides = self: super: with nixpkgs.haskell.lib; {
-      gitit =
-        overrideCabal super.gitit (old: {
+    overrides = self: super: with nixpkgs.haskell.lib.compose; {
+      gitit = lib.pipe super.gitit [
+        # We don’t need plugin support, this removes the runtime dependency on `GHC.Paths`!
+        (disableCabalFlag "plugins")
+        (overrideCabal (old: {
           # get version number from the cabal file
           version =
             let
@@ -87,7 +90,8 @@ let
               -t ${self.filestore} \
               $out/bin/gitit
           '';
-        });
+        }))
+      ];
     };
   };
 
