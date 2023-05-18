@@ -1,6 +1,8 @@
+/node_modules/
 cabal.sandbox.config
 TAGS
-dist
+/dist/
+/dist-newstyle/
 /wikidata
 /templates
 ./static/

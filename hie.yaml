@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "."
+      component: "lib:gitit"
+
+    - path: "./gitit.hs"
+      component: "gitit:exe:gitit"
+
+    - path: "./expireGititCache.hs"
+      component: "gitit:exe:expireGititCache"

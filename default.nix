@@ -1,12 +1,7 @@
 {
-  nixpkgsSrc ? fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/1ffba9f2f683063c2b14c9f4d12c55ad5f4ed887.tar.gz";
-    sha256 = "1zx5zvpvqrgk5mfxzmwf8gd270lz7dkfk563sccp1xlhac15cipg";
-  }
+  nixpkgs ? import ./nixpkgs.nix {}
 }:
-
 let
-  nixpkgs = import nixpkgsSrc {};
 
   mathJax = nixpkgs.fetchurl {
     url = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML-full";
