@@ -70,6 +70,23 @@ let
             cp ${simpleMDE}/dist/simplemde.min.css ./data/static/css/
           '';
           src = nixpkgs.nix-gitignore.gitignoreSource [ ".git/" "default.nix" "release.nix" "shell.nix" ] ./.;
+          postInstall = old.postInstall or "" + ''
+            remove-references-to \
+              -t ${self.pandoc-types} \
+              $out/bin/gitit
+            remove-references-to \
+              -t ${self.HTTP} \
+              $out/bin/gitit
+            remove-references-to \
+              -t ${self.pandoc} \
+              $out/bin/gitit
+            remove-references-to \
+              -t ${self.happstack-server} \
+              $out/bin/gitit
+            remove-references-to \
+              -t ${self.filestore} \
+              $out/bin/gitit
+          '';
         });
     };
   };
