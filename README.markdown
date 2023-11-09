@@ -17,6 +17,10 @@ OpenLab's gitit expects, in case you want to build it manually:
 * SimpleMDE in `data/js/simplemde.min.js` and `data/css/simplemde.min.css`
 * Font-Awesome in `data/font-awesome` (`css/{all.css,v4-shims.css}` and the `webfonts` directory)
 
+These dependencies can be initialized by running `make setup-runtime-dependencies`.
+Attention: this will overwrite some files in the directorie,
+so if you made any changes to the static dependencies make sure to stash or commit them first.
+
 Gitit
 =====
 

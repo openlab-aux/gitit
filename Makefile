@@ -5,4 +5,7 @@ all:
 install:
 	cabal v2-copy
 
+setup-runtime-dependencies:
+	extract-gitit-runtime-dependencies-to $(CURDIR)
+
 .PHONY: all clean install
