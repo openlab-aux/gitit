@@ -121,6 +121,7 @@ import Network.Gitit.ContentTransformer
 import Network.Gitit.Page
 import Network.Gitit.Authentication (loginUserForm)
 import Network.Gitit.MetaInformation (getDataFileName)
+import Control.Monad
 import Control.Monad.Reader
 import Prelude hiding (readFile)
 import qualified Data.ByteString.Char8 as B

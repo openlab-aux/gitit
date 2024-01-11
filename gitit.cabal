@@ -43,6 +43,7 @@ extra-source-files:  data/static/js/jquery-1.2.6.js
                      data/static/js/jquery-ui.droppable-1.6rc2.js
                      data/static/js/jquery-ui.draggable-1.6rc2.js
                      data/static/js/jquery-ui.tabs-1.6rc2.js
+extra-doc-files:     CHANGES, YUI-LICENSE, BLUETRIP-LICENSE, TANGOICONS
 data-files:          data/static/css/screen.css, data/static/css/print.css,
                      data/static/css/ie.css, data/static/css/highlighting.css,
                      data/static/css/reset-fonts-grids.css,
@@ -92,7 +93,7 @@ data-files:          data/static/css/screen.css, data/static/css/print.css,
                      plugins/ShowUser.hs,
                      plugins/Signature.hs,
                      plugins/Subst.hs,
-                     CHANGES, README.markdown, YUI-LICENSE, BLUETRIP-LICENSE, TANGOICONS
+                     README.markdown,
                      data/static/js/markdown-editor.js,
                      data/static/js/simplemde.min.js,
                      data/static/css/simplemde.min.css,
@@ -148,7 +149,7 @@ Library
                      temporary,
                      pandoc >= 2.9 && < 2.20 || >= 3.0 && < 3.2,
                      pandoc-types >= 1.20 && < 1.24,
-                     skylighting >= 0.8.2.3 && < 0.14,
+                     skylighting >= 0.8.2.3 && < 0.15,
                      bytestring,
                      text,
                      random,
@@ -172,10 +173,10 @@ Library
                      xss-sanitize >= 0.3 && < 0.4,
                      tagsoup >= 0.13 && < 0.15,
                      blaze-html >= 0.4 && < 0.10,
-                     json >= 0.4 && < 0.11,
+                     json >= 0.4 && < 0.12,
                      uri-bytestring >= 0.2.3.3,
                      split,
-                    hoauth2 >= 2.3.0 && < 2.9,
+                     hoauth2 >= 2.3.0 && < 2.11,
                      xml-conduit >= 1.5 && < 1.10,
                      http-conduit >= 2.1.6 && < 2.4,
                      http-client-tls >= 0.2.2 && < 0.4,
