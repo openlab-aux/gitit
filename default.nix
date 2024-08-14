@@ -83,23 +83,6 @@ let
             ${extractRuntimeDependenciesTo}/bin/extract-gitit-runtime-dependencies-to .
           '';
           src = pkgs.nix-gitignore.gitignoreSource [ ".git/" "default.nix" "release.nix" "shell.nix" ] ./.;
-          postInstall = old.postInstall or "" + ''
-            remove-references-to \
-              -t ${self.pandoc-types} \
-              $out/bin/gitit
-            remove-references-to \
-              -t ${self.HTTP} \
-              $out/bin/gitit
-            remove-references-to \
-              -t ${self.pandoc} \
-              $out/bin/gitit
-            remove-references-to \
-              -t ${self.happstack-server} \
-              $out/bin/gitit
-            remove-references-to \
-              -t ${self.filestore} \
-              $out/bin/gitit
-          '';
           passthru = {
             inherit extractRuntimeDependenciesTo;
           };
