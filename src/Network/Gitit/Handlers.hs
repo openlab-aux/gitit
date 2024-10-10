@@ -541,7 +541,7 @@ editPage' params = do
                    , submit "update" "Save"
                    , thediv ! [ identifier "previewpane" ] << noHtml
                    ]
-  let pgScripts' = ["preview.js", "simplemde.min.js", "markdown-editor.js" ]
+  let pgScripts' = ["preview.js", "easymde.min.js", "markdown-editor.js" ]
   let pgScripts'' = case mathMethod cfg of
        MathML       -> "MathMLinHTML.js" : pgScripts'
        MathJax url  -> url : pgScripts'

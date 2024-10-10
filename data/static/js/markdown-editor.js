@@ -1,6 +1,6 @@
-// include the SimpleMDE CSS dynamically (since it doesn't make sense without JS)
+// include the EasyMDE CSS dynamically (since it doesn't make sense without JS)
 //
-//var cssId = 'SimpleMDECSS'
+//var cssId = 'EasyMDECSS'
 //if (!document.getElementById(cssId))
 //{
 //    var head  = document.getElementsByTagName('head')[0];
@@ -8,18 +8,18 @@
 //    link.id   = cssId;
 //    link.rel  = 'stylesheet';
 //    link.type = 'text/css';
-//    link.href = '/static/simplemde.min.js';
+//    link.href = '/static/easymde.min.js';
 //    link.media = 'all';
 //    head.appendChild(link);
 //}
 
-var simplemde = new SimpleMDE({ element: document.getElementById("editedText"), forceSync: true, autoDownloadFontAwesome : false, spellChecker : false });
+var easymde = new EasyMDE({ element: document.getElementById("editedText"), forceSync: true, autoDownloadFontAwesome : false, spellChecker : false });
 
 // update the preview on every change, after `changeTimeout` ms.
 (function (){
     var changeTimeout = 1 *1000;
     var noTimeout = true;
-    simplemde.codemirror.on("change", function(chgs){
+    easymde.codemirror.on("change", function(chgs){
         if (noTimeout === true) {
             noTimeout = false;
             window.setTimeout(

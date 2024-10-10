@@ -28,10 +28,16 @@ let
     name = "font-awesome";
   };
 
-  simpleMDE = pkgs.fetchzip {
-    url = "https://github.com/sparksuite/simplemde-markdown-editor/archive/1.11.2.tar.gz";
-    sha256 = "0pzbyg7vl7bk7wlwgcmch9zxw04f4hakysza9xq0iyrnal22ra9i";
-    name = "simplemde";
+  easyMDECss = pkgs.fetchurl {
+    url = "https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.css";
+    sha256 = "sha256-ihSMlH9+YyUNj7jZfgMLb+9uAkgOoIwKz6yxFhisEfY=";
+    name = "easymde-css";
+  };
+
+  easyMDEJs = pkgs.fetchurl {
+    url = "https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.js";
+    sha256 = "sha256-QsV4wprmE4B/Q8KS4jNl8vZ2BxRQqPCTFGaKJ3IMzuM=";
+    name = "easymde-js";
   };
 
   extractRuntimeDependenciesTo = pkgs.writers.writeBashBin "extract-gitit-runtime-dependencies-to" ''
@@ -46,8 +52,8 @@ let
     cp ${mathJaxMenu} ./data/static/js/mathjax/extensions/MathMenu.js
     cp ${mathJaxZoom} ./data/static/js/mathjax/extensions/MathZoom.js
     cp -R ${fontAwesome} data/static/font-awesome
-    cp ${simpleMDE}/dist/simplemde.min.js ./data/static/js/
-    cp ${simpleMDE}/dist/simplemde.min.css ./data/static/css/
+    cp ${easyMDEJs} ./data/static/js/easymde.min.js
+    cp ${easyMDECss} ./data/static/css/easymde.min.css
   '';
 
   hp = pkgs.haskellPackages.override {
