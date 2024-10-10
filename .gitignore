@@ -15,8 +15,8 @@ github.conf
 /static/
 /data/static/js/mathjax
 /data/static/font-awesome
-/data/static/js/simplemde.min.js
-/data/static/css/simplemde.min.css
+/data/static/js/easymde.min.js
+/data/static/css/easymde.min.css
 
 /result*
 

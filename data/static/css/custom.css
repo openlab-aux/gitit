@@ -3,7 +3,7 @@
 
 /* Put your custom style modifications here: */
 
-/* simplemde font monospaced */
+/* easymde font monospaced */
 .CodeMirror pre {
   font-family: monospace;
 }

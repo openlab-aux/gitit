@@ -94,8 +94,8 @@ data-files:          data/static/css/screen.css, data/static/css/print.css,
                      plugins/Subst.hs,
                      CHANGES, README.markdown, YUI-LICENSE, BLUETRIP-LICENSE, TANGOICONS
                      data/static/js/markdown-editor.js,
-                     data/static/js/simplemde.min.js,
-                     data/static/css/simplemde.min.css,
+                     data/static/js/easymde.min.js,
+                     data/static/css/easymde.min.css,
                      data/static/js/mathjax/MathJax.js,
                      data/static/js/mathjax/extensions/*.js,
                      data/static/font-awesome/css/all.css,
@@ -118,7 +118,8 @@ Flag plugins
 
 Library
   hs-source-dirs:    src
-  exposed-modules:   Network.Gitit, Network.Gitit.ContentTransformer,
+  exposed-modules:   GititMain
+                     Network.Gitit, Network.Gitit.ContentTransformer,
                      Network.Gitit.Types, Network.Gitit.Framework,
                      Network.Gitit.Initialize, Network.Gitit.Config,
                      Network.Gitit.Layout, Network.Gitit.Authentication,

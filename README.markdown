@@ -3,7 +3,7 @@ OpenLab' gitit fork
 
 OpenLab's gitit fork includes the following improvements to default gitit:
 
-* Better Markdown editor (SimpleMDE)
+* Better Markdown editor (EasyMDE)
 * Self-Hosted MathJax
 * Some minor adjustments for our Wiki
 
@@ -14,7 +14,7 @@ cabal will find them while building.
 OpenLab's gitit expects, in case you want to build it manually:
 
 * MathJax v2 in `data/js/mathjax/{MathJax.js,extensions/MathZoom.js,extensions/MathMenu.js}`
-* SimpleMDE in `data/js/simplemde.min.js` and `data/css/simplemde.min.css`
+* EasyMDE in `data/js/easymde.min.js` and `data/css/easymde.min.css`
 * Font-Awesome in `data/font-awesome` (`css/{all.css,v4-shims.css}` and the `webfonts` directory)
 
 These dependencies can be initialized by running `make setup-runtime-dependencies`.
@@ -209,7 +209,7 @@ support (see above), you can get highlighted source code by using
     ~~~ {.haskell .numberLines}
     qsort []     = []
     qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++
-                   qsort (filter (>= x) xs) 
+                   qsort (filter (>= x) xs)
     ~~~
 
 To see what languages your pandoc was compiled to highlight:
@@ -312,9 +312,9 @@ To change the footer, modify `templates/footer.st`.
 
 For more radical changes, you can override any of the default
 templates in `$CABALDIR/share/gitit-x.y.z/data/templates` by copying
-the file into `templates`, modifying it, and restarting gitit. The 
-`page.st` template is the master template; it includes the others. 
-Interpolated variables are surrounded by `$`s, so `literal $` must 
+the file into `templates`, modifying it, and restarting gitit. The
+`page.st` template is the master template; it includes the others.
+Interpolated variables are surrounded by `$`s, so `literal $` must
 be backslash-escaped.
 
 Adding support for math
@@ -509,21 +509,21 @@ loaded, and set up a virtual host with the following configuration:
         RewriteEngine On
         ProxyPreserveHost On
         ProxyRequests Off
-    
+
         <Proxy *>
            Order deny,allow
            Allow from all
         </Proxy>
-    
+
         ProxyPassReverse /    http://127.0.0.1:5001
         RewriteRule ^(.*) http://127.0.0.1:5001$1 [P]
-    
+
         ErrorLog /var/log/apache2/error.log
         LogLevel warn
-    
+
         CustomLog /var/log/apache2/access.log combined
         ServerSignature On
-    
+
     </VirtualHost>
 
 Reload your apache configuration and you should be all set.

@@ -540,7 +540,7 @@ editPage' params = do
                    , submit "update" "Save"
                    , thediv ! [ identifier "previewpane" ] << noHtml
                    ]
-  let pgScripts' = ["preview.js", "simplemde.min.js", "markdown-editor.js" ]
+  let pgScripts' = ["preview.js", "easymde.min.js", "markdown-editor.js" ]
   let pgScripts'' = case mathMethod cfg of
        MathML       -> "MathMLinHTML.js" : pgScripts'
        MathJax url  -> url : pgScripts'
@@ -718,7 +718,7 @@ categoryPage = do
   base' <- getWikiBase
   let toMatchListItem file = li <<
         [ anchor ! [href $ base' ++ urlForPage (dropExtension file)] << dropExtension file ]
-  let toRemoveListItem cat = li << 
+  let toRemoveListItem cat = li <<
         [ anchor ! [href $ base' ++
         (if null (tail pcategories)
          then "/_categories"
@@ -730,8 +730,8 @@ categoryPage = do
         << ("+" ++ cat) ]
   let matchList = ulist << map toMatchListItem (fst $ unzip matches) +++
                   thediv ! [ identifier "categoryList" ] <<
-                  ulist << (++) (map toAddListItem (nub $ concat $ snd $ unzip matches)) 
-                                (map toRemoveListItem pcategories) 
+                  ulist << (++) (map toAddListItem (nub $ concat $ snd $ unzip matches))
+                                (map toRemoveListItem pcategories)
   formattedPage defaultPageLayout{
                   pgPageName = categoryDescription,
                   pgShowPageTools = False,
