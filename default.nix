@@ -48,12 +48,12 @@ let
     cd $TARGET_DIR
     rm -rf ./data/static/{font-awesome,js/mathjax}
     mkdir -p ./data/static/js/mathjax/extensions
-    cp ${mathJax} ./data/static/js/mathjax/MathJax.js
-    cp ${mathJaxMenu} ./data/static/js/mathjax/extensions/MathMenu.js
-    cp ${mathJaxZoom} ./data/static/js/mathjax/extensions/MathZoom.js
-    cp -R ${fontAwesome} data/static/font-awesome
-    cp ${easyMDEJs} ./data/static/js/easymde.min.js
-    cp ${easyMDECss} ./data/static/css/easymde.min.css
+    cp --no-preserve=mode ${mathJax} ./data/static/js/mathjax/MathJax.js
+    cp --no-preserve=mode ${mathJaxMenu} ./data/static/js/mathjax/extensions/MathMenu.js
+    cp --no-preserve=mode ${mathJaxZoom} ./data/static/js/mathjax/extensions/MathZoom.js
+    cp --no-preserve=mode -R ${fontAwesome} data/static/font-awesome
+    cp --no-preserve=mode ${easyMDEJs} ./data/static/js/easymde.min.js
+    cp --no-preserve=mode ${easyMDECss} ./data/static/css/easymde.min.css
   '';
 
   hp = pkgs.haskellPackages.override {

@@ -99,13 +99,13 @@ data-files:          data/static/css/screen.css, data/static/css/print.css,
                      data/static/css/easymde.min.css,
                      data/static/js/mathjax/MathJax.js,
                      data/static/js/mathjax/extensions/*.js,
-                     data/static/font-awesome/css/all.css,
-                     data/static/font-awesome/css/v4-shims.css,
-                     data/static/font-awesome/webfonts/*.eot,
-                     data/static/font-awesome/webfonts/*.svg,
-                     data/static/font-awesome/webfonts/*.woff,
-                     data/static/font-awesome/webfonts/*.woff2,
-                     data/static/font-awesome/webfonts/*.ttf
+                     data/static/font-awesome/css/fontawesome.css,
+                     data/static/font-awesome/css/solid.css,
+                     data/static/font-awesome/webfonts/fa-solid-900.eot,
+                     data/static/font-awesome/webfonts/fa-solid-900.svg,
+                     data/static/font-awesome/webfonts/fa-solid-900.woff,
+                     data/static/font-awesome/webfonts/fa-solid-900.woff2,
+                     data/static/font-awesome/webfonts/fa-solid-900.ttf
 
 Source-repository head
   type:          git
