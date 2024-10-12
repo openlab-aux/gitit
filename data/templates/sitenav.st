@@ -16,11 +16,11 @@
       <li><a href="$base$/Help">Help</a></li>
     </ul>
     <form action="$base$/_search" method="get" id="searchform">
-     <input type="text" name="patterns" id="patterns"/>
+     <input type="text" name="patterns" id="patterns" aria-label="search term" />
      <input type="submit" name="search" id="search" value="Search"/>
     </form>
     <form action="$base$/_go" method="post" id="goform">
-      <input type="text" name="gotopage" id="gotopage"/>
+      <input type="text" name="gotopage" id="gotopage" aria-label="go to page" />
       <input type="submit" name="go" id="go" value="Go"/>
     </form>
   </fieldset>
